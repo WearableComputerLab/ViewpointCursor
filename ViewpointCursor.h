@@ -52,7 +52,7 @@ namespace wcl {
              *                   use mm as the units in our SAR system, so 20mm works for us.
              * @param invertY Whether to invert Y axis input.
              */
-            ViewpointCursor(float inputScale=1.0f, float cursorSize=20, bool invertY = false);
+            ViewpointCursor(float inputScale=1.0f, bool invertY = false);
 
 
             /**
@@ -69,29 +69,19 @@ namespace wcl {
             void moveCursor(float dx, float dy);
 
             /**
-             * Returns the object at the current cursor location.
+             * Returns information about the current cursor location.
+             * Returns a pointer to a Selectable object if the cursor is
+             * placed over the object.
              */
-            Selection getObjectAtCursor();
+            Selection getCursor();
 
             /**
-             * Returns the 3D position of the cursor.
-             */
-            wcl::Vector getCursorPosition();
-
-            /**
-             * Renders the cursor to a 3D scene.
+             * Get the rotation of the cursor.
              *
-             * Assumes you have already configured the projection and modelview
-             * matrices for your projector.
+             * The cursor should be rotated so it's always drawn perpendicular
+             * to the surface normal.
              */
-            void drawCursor();
-
-            /**
-             * Renders a debug view to visualise what is happening.
-             *
-             * For best results use this on a monitor, not a projector.
-             */
-            void drawDebug();
+            wcl::SMatrix getCursorRotation();
 
             
             /**
@@ -147,11 +137,6 @@ namespace wcl {
              */
             double mouseScale;
 
-            /**
-             * Size to draw cursor
-             */
-            double cursorScale;
-
             bool updatePending;
 
             /**
@@ -172,9 +157,6 @@ namespace wcl {
             wcl::Vector getCursorDirection() const;
             wcl::SMatrix getCursorTransform() const; 
 
-            void drawViewDirection();
-            void drawUser();
-            void drawCursorPlane();
     };
 
 };
