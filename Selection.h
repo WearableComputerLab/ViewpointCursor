@@ -48,10 +48,19 @@ namespace wcl {
          */
         glm::vec3 normal;
 
+
+        /**
+         * A rotation matrix that can be used to rotate the target so it's
+         * drawn perpenducular to the surface.
+         */
+        glm::mat4 rotationMatrix;
+
         /**
          * The selected object.
          */
         Selectable* object;
+
+        float distance;
     };
 
 };

@@ -42,7 +42,8 @@ namespace wcl {
          * @param direction The direction of the intersection ray.
          *
          * @return an Intersection object. The closestDistance should be used
-         *         to verify the object was selected.
+         *         to verify the object was selected. In otherwords, if
+         *         selection.distance < 0, there was no selection.
          */
         virtual Selection intersect(const glm::vec3& position, const glm::vec3& direction) = 0;
         virtual ~Selectable() {}
