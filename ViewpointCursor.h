@@ -43,6 +43,12 @@ namespace wcl {
     class ViewpointCursor
     {
         /**
+         * ViewpointCursor needs a list of selectable objects. To keep things
+         * clean, we just typedef a std::vector and use that.
+         */
+        typdedef std::vector<Selectable*> SelectableList;
+
+        /**
          * Controls how 2D input is interpreted.
          */
         enum MouseMode {
@@ -80,7 +86,7 @@ namespace wcl {
              * @param dx Relative movement in X.
              * @param dy Relative movement in Y.
              */
-            void moveCursor(float dx, float dy);
+            void moveCursor(glm::vec2 relativeInput);
 
 
             /**
@@ -144,14 +150,14 @@ namespace wcl {
              */
             glm::vec3 cursorNormal;
 
-            glm::vec3 backCursor;
+            glm::vec4 backCursor;
             glm::vec3 planePos;
             floatplaneDistance;
 
             /**
              * Whether to invert Y axis input.
              */
-            MouseMode mode;
+            MouseMode mouseMode;
 
             /**
              * Scalar for mouse input
@@ -164,12 +170,15 @@ namespace wcl {
              * User position.
              */
             glm::vec3 userPos;
+            glm::vec3 viewDirection;
             glm::vec3 poi;
 
             /**
              * Initial placement of cursor.
              */
             bool cursorPlaced; 
+
+            void reverseUpdate();
 
             glm::vec3 getViewDirection() const;
             glm::mat4 getUserRotation() const;
