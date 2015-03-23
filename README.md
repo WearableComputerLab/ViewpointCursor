@@ -51,7 +51,7 @@ Not into autotools? Just copy the source files into your project.
 
 ### Dependencies
 It's just C++. VP was originally implemented for Linux, but has also been
-tested on OSX. I don't do any crazy cross-platform stuff, so it should work on
+tested on OSX. I don't do any crazy platform-specific stuff, so it should work on
 Windows.
 
 VP requires the following libraries:
