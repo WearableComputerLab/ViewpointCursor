@@ -28,7 +28,7 @@
 #ifndef VIEWPOINT_CURSOR_SELECTABLE_H
 #define VIEWPOINT_CURSOR_SELECTABLE_H
 
-#include <sar/maths/Vector.h>
+#include <glm/vec3.hpp>
 
 namespace wcl {
     /**
@@ -44,7 +44,7 @@ namespace wcl {
          * @return an Intersection object. The closestDistance should be used
          *         to verify the object was selected.
          */
-        virtual Intersection intersect(const wcl::Vector& position, const wcl::Vector& direction) = 0;
+        virtual Selection intersect(const glm::vec3& position, const glm::vec3& direction) = 0;
         virtual ~Selectable() {}
 
     };

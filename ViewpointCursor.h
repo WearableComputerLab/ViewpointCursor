@@ -31,9 +31,8 @@
 #include <base/Module.h>
 #include <graphics/Texture.h>
 
-#include <wcl/maths/Vector.h>
-#include <wcl/maths/Quaternion.h>
-
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace wcl {
 
@@ -43,16 +42,30 @@ namespace wcl {
      */
     class ViewpointCursor
     {
+        /**
+         * Controls how 2D input is interpreted.
+         */
+        enum MouseMode {
+            /**
+             * Use input as provided.
+             */
+            NORMAL,
+
+            /**
+             * Invert Y axis. This is needed depending on how you calibrate
+             * your projector.
+             */
+            INVERT_Y
+        };
+
         public:
             /**
              * Construct a new ViewpointCursor object.
              *
              * @param inputScale A scalar for mouse input controlling sensitivity.
-             * @param cursorSize The size of the cursor, visible to the user. We
-             *                   use mm as the units in our SAR system, so 20mm works for us.
-             * @param invertY Whether to invert Y axis input.
+             * @param mode How to interpret 2D input.
              */
-            ViewpointCursor(float inputScale=1.0f, bool invertY = false);
+            ViewpointCursor(float inputScale=1.0f, MouseMode mode = NORMAL);
 
 
             /**
@@ -60,6 +73,7 @@ namespace wcl {
              */
             ~ViewpointCursor();
 
+            
             /**
              * Move the cursor based on 2D input from the user.
              *
@@ -68,6 +82,7 @@ namespace wcl {
              */
             void moveCursor(float dx, float dy);
 
+
             /**
              * Returns information about the current cursor location.
              * Returns a pointer to a Selectable object if the cursor is
@@ -75,13 +90,19 @@ namespace wcl {
              */
             Selection getCursor();
 
+
             /**
-             * Get the rotation of the cursor.
+             * Get the rotation of the cursor.              *
              *
              * The cursor should be rotated so it's always drawn perpendicular
-             * to the surface normal.
+             * to the surface normal. This function returns a 4x4
+             * matrix that can be given straight to OpenGL either via
+             * glMultMatrixf or as a uniform to a shader.
+             *
+             * @return The rotation matrix for rendering the cursor
+             * perpendicular to the selection.
              */
-            wcl::SMatrix getCursorRotation();
+            glm::mat4 getCursorRotation();
 
             
             /**
@@ -95,7 +116,7 @@ namespace wcl {
              *
              * @param position The position of the user.
              */
-            void setUserPosition(wcl::Vector position);
+            void setUserPosition(glm::vec3 position);
 
             /**
              * Set the direction the user is looking.
@@ -105,57 +126,57 @@ namespace wcl {
              *
              * @param The direction vector for the user.
              */
-            void setViewDirection(wcl::Vector direction);
+            void setViewDirection(glm::vec3 direction);
 
         private:
             /**
              * The 2D Device cursor.
              */
-            wcl::Vector cursor2D;
+            glm::vec2 cursor2D;
 
             /**
              * The 3D Viewpoint Cursor
              */
-            wcl::Vector cursor3D;
+            glm::vec3 cursor3D;
 
             /**
              * The surface normal at the cursor location.
              */
-            wcl::Vector cursorNormal;
+            glm::vec3 cursorNormal;
 
-            wcl::Vector backCursor;
-            wcl::Vector planePos;
-            double planeDistance;
+            glm::vec3 backCursor;
+            glm::vec3 planePos;
+            floatplaneDistance;
 
             /**
              * Whether to invert Y axis input.
              */
-            bool invertY;
+            MouseMode mode;
 
             /**
              * Scalar for mouse input
              */
-            double mouseScale;
+            float mouseScale;
 
             bool updatePending;
 
             /**
              * User position.
              */
-            wcl::Vector userPos;
-            wcl::Vector poi;
+            glm::vec3 userPos;
+            glm::vec3 poi;
 
             /**
              * Initial placement of cursor.
              */
             bool cursorPlaced; 
 
-            wcl::Vector getViewDirection() const;
-            wcl::SMatrix getUserRotation() const;
-            wcl::SMatrix getUserTransform() const;
-            wcl::Vector getUserPosition() const;
-            wcl::Vector getCursorDirection() const;
-            wcl::SMatrix getCursorTransform() const; 
+            glm::vec3 getViewDirection() const;
+            glm::mat4 getUserRotation() const;
+            glm::mat3  getUserTransform() const;
+            glm::vec3  getUserPosition() const;
+            glm::vec3  getCursorDirection() const;
+            glm::mat4 getCursorTransform() const; 
 
     };
 

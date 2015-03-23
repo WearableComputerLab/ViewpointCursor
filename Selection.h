@@ -28,7 +28,9 @@
 #ifndef VIEWPOINT_CURSOR_SELECTION_H
 #define VIEWPOINT_CURSOR_SELECTION_H
 
-#include <sar/maths/Vector.h>
+#include <glm/vec3.hpp>
+
+#include "Selectable.h"
 
 namespace wcl {
     /**
@@ -39,12 +41,12 @@ namespace wcl {
         /**
          * The selected position in 3D world coordinates.
          */
-        wcl::Vector pos;
+        glm::vec3 pos;
 
         /**
          * The surface normal at the selection point.
          */
-        wcl::Vector normal;
+        glm::vec3 normal;
 
         /**
          * The selected object.
