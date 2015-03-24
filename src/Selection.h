@@ -29,10 +29,13 @@
 #define VIEWPOINT_CURSOR_SELECTION_H
 
 #include <glm/vec3.hpp>
+#include <glm/geometric.hpp>
 
-#include "Selectable.h"
 
 namespace wcl {
+    // forward dec
+    class Selectable;
+
     /**
      * Selection holds information about objects and points of interest selected by
      * Viewpoint Cursor.

@@ -28,11 +28,13 @@
 #ifndef VIEWPOINT_CURSOR_H 
 #define VIEWPOINT_CURSOR_H 
 
-#include <base/Module.h>
-#include <graphics/Texture.h>
-
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+
+#include <vector>
+
+#include "Selectable.h"
 
 namespace wcl {
 
@@ -46,7 +48,7 @@ namespace wcl {
          * ViewpointCursor needs a list of selectable objects. To keep things
          * clean, we just typedef a std::vector and use that.
          */
-        typdedef std::vector<Selectable*> SelectableList;
+        typedef std::vector<Selectable*> SelectableList;
 
         /**
          * Controls how 2D input is interpreted.
@@ -94,7 +96,7 @@ namespace wcl {
              * Returns a pointer to a Selectable object if the cursor is
              * placed over the object.
              */
-            Selection getCursor();
+            Selection getCursor(const SelectableList& selectables);
 
 
             /**
@@ -152,7 +154,7 @@ namespace wcl {
 
             glm::vec4 backCursor;
             glm::vec3 planePos;
-            floatplaneDistance;
+            float planeDistance;
 
             /**
              * Whether to invert Y axis input.
@@ -182,7 +184,7 @@ namespace wcl {
 
             glm::vec3 getViewDirection() const;
             glm::mat4 getUserRotation() const;
-            glm::mat3  getUserTransform() const;
+            glm::mat4  getUserTransform() const;
             glm::vec3  getUserPosition() const;
             glm::vec3  getCursorDirection() const;
             glm::mat4 getCursorTransform() const; 

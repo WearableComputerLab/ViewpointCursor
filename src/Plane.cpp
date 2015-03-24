@@ -28,12 +28,13 @@
 
 #include "Plane.h"
 
+#include <glm/geometric.hpp>
 
 namespace wcl {
 
     Plane::Plane(const glm::vec3& p, const glm::vec3& n) {
         point = p;
-        normal = normalize(n);
+        normal = glm::normalize(n);
     }
 
 

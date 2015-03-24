@@ -25,7 +25,10 @@
  */
 
 
+#include <glm/geometric.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 
+#include "Plane.h"
 #include "ViewpointCursor.h"
 
 
@@ -34,7 +37,7 @@ namespace wcl {
 
     ViewpointCursor::ViewpointCursor(float inputScale, MouseMode mode) 
         : planeDistance(10000), mouseScale(inputScale), mouseMode(mode),
-        updatePending(false), {
+        updatePending(false) {
 
         }
 
@@ -45,32 +48,31 @@ namespace wcl {
 
         cursor2D.x = cursor2D.x + relativeInput.x*mouseScale;
         if (mouseMode == INVERT_Y) {
-            cursor2D.y = cursor2D.y - relativeInputy*mouseScale;
+            cursor2D.y = cursor2D.y - relativeInput.y*mouseScale;
         }
         else {
-            cursor2D.y = cursor2D.y + relativeInputy*mouseScale;
+            cursor2D.y = cursor2D.y + relativeInput.y*mouseScale;
         }
         updatePending = true;
     }
 
     Selection ViewpointCursor::getCursor(const SelectableList& selectables) {
+        Selectable* closestObject = NULL;
+        Selection closestIntersection;
         if (updatePending) {
 
-            Selectable* closestObject = NULL;
-            Selection closestIntersection;
+            closestIntersection.distance = std::numeric_limits<float>::max();
 
-            closestIntersection.distance = numeric_limits<float>::max();
-
-            wcl::Vector p = getUserPosition();
-            wcl::Vector d = getCursorDirection();
+            glm::vec3 p = getUserPosition();
+            glm::vec3 d = getCursorDirection();
 
 
             // First up, see if we intersect one of the objects.
-            foreach (Selectable* s, selectables)
-            {
+            for (SelectableList::const_iterator it = selectables.begin(); it < selectables.end(); ++it) {
+                Selectable* s = *it;
                 Selection i = s->intersect(p, d);
 
-                if (i.distance > 0  i.distance < closestIntersection.distance)
+                if (i.distance > 0 && i.distance < closestIntersection.distance)
                 {
                     closestObject = s;
                     closestIntersection = i;
@@ -81,31 +83,27 @@ namespace wcl {
             // Return the closest object, if there was one.
             if (closestObject != NULL) {
                 cursorPlaced = true;
-                cursor3D = closestIntersection.closestPoint;
+                cursor3D = closestIntersection.pos;
                 cursorNormal = closestIntersection.normal;
                 closestIntersection.rotationMatrix = getCursorRotation();
-                closestIntersection.object = closestObject/
+                closestIntersection.object = closestObject;
             }
 
             // intersect with magic plane so at least the cursor appears...
             else {
-                clog << "Trying to intersect against magic plane" << endl;
                 glm::vec3 userDirection = getViewDirection();
                 Plane plane(p + userDirection*planeDistance, userDirection);
-                Ray::Intersection ip = plane.intersect(p, d);
+                Plane::Intersection ip = plane.intersect(p, d);
                 if (ip.intersects) {
                     cursorPlaced = true;
-                    cursor3D = ip.point;
-                    cursorNormal = userDirection*-1;
+                    cursor3D = ip.intersectionPoint;
+                    cursorNormal = userDirection*-1.0f;
                     cursorPlaced = true;
 
-                    closestIntersection.point = cursor3D;
+                    closestIntersection.pos = cursor3D;
                     closestIntersection.normal = cursorNormal;
                     closestIntersection.rotationMatrix = getCursorRotation();
                     closestIntersection.object = NULL;
-                }
-                else {
-                    clog << "No intersection with an infinite plane? Weird" << endl;
                 }
             }
         }
@@ -123,23 +121,21 @@ namespace wcl {
     }
 
     void ViewpointCursor::reverseUpdate() {
-        glm::vec3 d = normalize(cursor3D - userPos);
+        glm::vec3 d = glm::normalize(cursor3D - userPos);
         planePos = userPos + viewDirection*planeDistance;
-        glm::vec3 d = (cursor3D - userPos).unit();
 
-        wcl::Plane p(planePos, userDir);
+        wcl::Plane p(planePos, viewDirection);
 
-        Plane::Intersection i = ray.intersect(userPos, d);
+        Plane::Intersection i = p.intersect(userPos, d);
 
         if (i.intersects) {
-            backCursor = (i.point.x, i.point.y, i.point.z, 1);
+            backCursor = glm::vec4(i.intersectionPoint.x, i.intersectionPoint.y, i.intersectionPoint.z, 1);
 
             // rotate back to local...
-            glm::vec4 vi = inv(getUserTransform()) * backCursor;
+            glm::vec4 vi = glm::affineInverse(getUserTransform()) * backCursor;
 
             cursor2D.x = vi.x;
             cursor2D.y = vi.y;
         }
-
     }
 };

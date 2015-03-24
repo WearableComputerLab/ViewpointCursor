@@ -30,23 +30,26 @@
 
 #include <glm/vec3.hpp>
 
+#include "Selection.h"
+
 namespace wcl {
     /**
      * An object that can be selected using a raycasting approach.
      */
     class Selectable {
-        /**
-         * Intersection test between this object and a ray.
-         *
-         * @param position The starting point of the intersection ray.
-         * @param direction The direction of the intersection ray.
-         *
-         * @return an Intersection object. The closestDistance should be used
-         *         to verify the object was selected. In otherwords, if
-         *         selection.distance < 0, there was no selection.
-         */
-        virtual Selection intersect(const glm::vec3& position, const glm::vec3& direction) = 0;
-        virtual ~Selectable() {}
+        public:
+            /**
+             * Intersection test between this object and a ray.
+             *
+             * @param position The starting point of the intersection ray.
+             * @param direction The direction of the intersection ray.
+             *
+             * @return an Intersection object. The closestDistance should be used
+             *         to verify the object was selected. In otherwords, if
+             *         selection.distance < 0, there was no selection.
+             */
+            virtual Selection intersect(const glm::vec3& position, const glm::vec3& direction) = 0;
+            virtual ~Selectable() {}
 
     };
 
