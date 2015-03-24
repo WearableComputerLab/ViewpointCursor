@@ -15,12 +15,12 @@ Spatial Augmented Reality systems. At its heart, ViewpointCursor is ray-based
 selection, but does a few tricks to handle the limitation of projectors. In
 particular:
 
-1. VP does away with the system cursor all together. The system cursor is
+1. VC does away with the system cursor all together. The system cursor is
    useless in SAR, because the standard left-right mapping of cursors to
    monitors doesn't work when you have projectors in all kinds of positions and
    orientations.
 
-1. VP maps 2D input to a virtual plane in front of the user. This makes input
+1. VC maps 2D input to a virtual plane in front of the user. This makes input
    make sense. Left is always left, up is always up, from the user's point of
    view.
 
@@ -39,22 +39,23 @@ particular:
 ## Installation
 Run:
 
-```
-./configure
-make
-make install
-```
+    ./configure
+    make
+    make install
 
 You can use pkg-config to configure include paths and linker flags.
+
+    CXXFLAGS = `pkg-config --cflags libViewpointCursor`
+    LDFLAGS  = `pkg-config --libs libViewpointCursor`
 
 Not into autotools? Just copy the source files into your project.
 
 ### Dependencies
-It's just C++. VP was originally implemented for Linux, but has also been
+It's just C++. VC was originally implemented for Linux, but has also been
 tested on OSX. I don't do any crazy platform-specific stuff, so it should work on
 Windows.
 
-VP requires the following libraries:
+VC requires the following libraries:
 
 * GLM (http://http://glm.g-truc.net/)
 * OpenGL, GLUT (for demo app)
