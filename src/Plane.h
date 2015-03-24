@@ -41,20 +41,20 @@ namespace wcl {
         };
 
         public:
-            Plane(const glm::vec3& point, const glm::vec3& normal);
-            Intersection intersect(glm::vec3 start, glm::vec3 direction);
+        Plane(const glm::vec3& point, const glm::vec3& normal);
+        Intersection intersect(glm::vec3 start, glm::vec3 direction);
 
 
         private:
-			/**
-			 * The surface normal of the plane (A,B,C).
-			 */
-            glm::vec3 normal;
+        /**
+         * The surface normal of the plane (A,B,C).
+         */
+        glm::vec3 normal;
 
-			/**
-			 * A point that lies on the plane.
-			 */
-            glm::vec3 point;
+        /**
+         * A point that lies on the plane.
+         */
+        glm::vec3 point;
     };
 };
 
