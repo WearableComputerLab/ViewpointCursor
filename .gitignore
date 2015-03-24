@@ -30,3 +30,21 @@
 # Vim
 *.swp
 *.un~
+
+
+# autotools
+*Makefile
+*Makefile.in
+*config.log
+*config.status
+configure
+*.pc
+*config.h.in
+*config.h
+*/.deps
+cfg/*
+*stamp-h1
+*.m4
+autom4te\.cache/*
+libtool
+
